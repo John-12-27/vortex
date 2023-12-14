@@ -14,6 +14,7 @@
 `include "VX_platform.vh"
 
 `TRACING_OFF
+/* a leading/trailing zero counter */
 module VX_lzc #(
     parameter N       = 2,
     parameter REVERSE = 0,  // 0 -> leading zero, 1 -> trailing zero,
