@@ -281,7 +281,7 @@ module VX_schedule import VX_gpu_pkg::*; #(
 
     wire [`NUM_WARPS-1:0] ready_warps = active_warps & ~(stalled_warps | barrier_stalls);
 
-    VX_lzc #(
+    VX_lzc #( //leading zero counter & get the first ready warp
         .N       (`NUM_WARPS),
         .REVERSE (1)
     ) wid_select (
