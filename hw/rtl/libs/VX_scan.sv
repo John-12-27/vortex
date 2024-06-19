@@ -35,7 +35,7 @@ module VX_scan #(
     if (REVERSE != 0) begin
         assign t[0] = data_in;
     end else begin
-        assign t[0] = {<<{data_in}};
+        assign t[0] = {<<{data_in}};  //{<<{}} 直接就调换了信号的顺序
     end
 
     // optimize for the common case of small and-scans
