@@ -119,8 +119,8 @@ module VX_alu_int #(
         wire [`XLEN-1:0] sub_slt_br_result = (is_sub_op && ~is_br_op) ? sub_result[i][`XLEN-1:0] : slt_br_result;
         always @(*) begin
             case ({is_alu_w, op_class})
-                3'b000: alu_result[i] = add_result[i];      // ADD, LUI, AUIPC, destination address of JAL, JALR and BR*
-                3'b001: alu_result[i] = sub_slt_br_result;  // SUB, SLTU, SLTI, comparative results of BR*
+                3'b000: alu_result[i] = add_result[i];      // ADD, LUI, AUIPC, Destination addresses of J* and BR*
+                3'b001: alu_result[i] = sub_slt_br_result;  // SUB, SLTU, SLTI, Comparative results of BR*
                 3'b010: alu_result[i] = shr_zic_result[i]; // SRL, SRA, SRLI, SRAI, CZERO*
                 3'b011: alu_result[i] = msc_result[i];      // AND, OR, XOR, SLL, SLLI
                 3'b100: alu_result[i] = add_result_w[i];    // ADDIW, ADDW
@@ -139,7 +139,7 @@ module VX_alu_int #(
     wire [LANE_WIDTH-1:0] tid, tid_r;
     wire is_br_op_r;
 
-    assign cbr_dest = add_result[0][1 +: `PC_BITS];
+    assign cbr_dest = add_result[0][1 +: `PC_BITS]; //BR*的跳转地址由指令决定（PC+imm），各个lane算出来的都一样
 
     if (LANE_BITS != 0) begin
         assign tid = execute_if.data.tid[0 +: LANE_BITS];
@@ -165,7 +165,7 @@ module VX_alu_int #(
     wire is_br_less = `INST_BR_IS_LESS(br_op_r);
     wire is_br_static = `INST_BR_IS_STATIC(br_op_r);
 
-    wire [`XLEN-1:0] br_result = alu_result_r[tid_r];
+    wire [`XLEN-1:0] br_result = alu_result_r[tid_r]; //J*的跳转地址由指令决定，但BR*是否跳转与各个lane中寄存器的值有关
     wire is_less  = br_result[0];
     wire is_equal = br_result[1];
 
