@@ -119,8 +119,8 @@ module VX_alu_int #(
         wire [`XLEN-1:0] sub_slt_br_result = (is_sub_op && ~is_br_op) ? sub_result[i][`XLEN-1:0] : slt_br_result;
         always @(*) begin
             case ({is_alu_w, op_class})
-                3'b000: alu_result[i] = add_result[i];      // ADD, LUI, AUIPC
-                3'b001: alu_result[i] = sub_slt_br_result;  // SUB, SLTU, SLTI, BR*
+                3'b000: alu_result[i] = add_result[i];      // ADD, LUI, AUIPC, destination address of JAL, JALR and BR*
+                3'b001: alu_result[i] = sub_slt_br_result;  // SUB, SLTU, SLTI, comparative results of BR*
                 3'b010: alu_result[i] = shr_zic_result[i]; // SRL, SRA, SRLI, SRAI, CZERO*
                 3'b011: alu_result[i] = msc_result[i];      // AND, OR, XOR, SLL, SLLI
                 3'b100: alu_result[i] = add_result_w[i];    // ADDIW, ADDW
