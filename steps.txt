@@ -1,0 +1,20 @@
+1.安装docker
+
+2.网络问题，手动拉取镜像文件
+    $ sudo docker pull ubuntu:20.04
+
+3.用ssh clone代码到本地(fork的仓库)
+    git clone git@github.com:John-12-27/vortex.git 
+
+4.更新第三方库
+    git submodule init
+    git submodule update --recursive
+
+5.由于存在网络问题，去掉了原本从官方仓库clone的命令，直接COPY本地代码
+    COPY ./vortex /vortex
+    
+6.用Dockerfile创建镜像
+    $ sudo docker build --platform=linux/amd64 -t vortex-packaged -f Dockerfile.prod .
+
+7.用已有的镜像创建容器，宿主机代码到容器代码的自动同步(宿主机的~/Vortex/vortex/hw/挂载到容器内的/vortex/hw)
+    $ sudo docker run -it -v ./vortex/hw/:/vortex/hw --name vortex --privileged=true --platform=linux/amd64 vortex-packaged
